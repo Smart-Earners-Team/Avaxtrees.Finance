@@ -34,6 +34,7 @@ const IndexPage = (props: PageProps) => {
   const [harvesting, setHarvesting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [daysOfReplant, setDaysOfReplant] = useState("0");
+  const [endTime, setEndTime] = useState(0);
 
   const {
     wallet: { balance },
@@ -43,6 +44,20 @@ const IndexPage = (props: PageProps) => {
   const { active, library, account } = useActiveWeb3React();
   const { toastError, toastSuccess } = useToast();
   const { fast } = useContext(RefreshContext);
+
+  useEffect(() => {
+    const runTest = async () => {
+      if (library && account) {
+        const contract = getTreeContract(library.getSigner());
+        const { _hex: time } = await contract.getUnlockTime(account);
+        const timestamp = new BigNumber(time).toNumber();
+        setEndTime(timestamp);
+      } else {
+        setEndTime(0);
+      }
+    };
+    runTest();
+  }, [library, account, fast]);
 
   // Get AVAX Balance in the contract
   useEffect(() => {
@@ -85,7 +100,7 @@ const IndexPage = (props: PageProps) => {
           setAvaxRewards(avax);
           setDaysOfReplant(new BigNumber(days).toJSON());
         } catch (err) {
-          console.error(err);
+          // console.error(err);
           setTreeBal("0");
           setAvaxRewards("0");
         }
@@ -161,6 +176,10 @@ const IndexPage = (props: PageProps) => {
         await harvestCrops(library.getSigner());
         toastSuccess("Success", "You have harvested");
         triggerFetchTokens();
+        const contract = getTreeContract(library.getSigner());
+        const { _hex: time } = await contract.getUnlockTime(account);
+        const timestamp = new BigNumber(time).toNumber();
+        setEndTime(timestamp);
       } catch (err) {
         console.error(err);
         toastError(
@@ -218,13 +237,13 @@ const IndexPage = (props: PageProps) => {
           </div>
         </div>
         <div className="flex flex-col-reverse md:flex-row justify-center my-10 md:space-x-10">
-          <div className="w-full max-w-sm">
+          <div className="w-full max-w-sm mx-auto">
             <div className="rounded-lg py-2 px-4 bg-white">
               <div className="font-light text-center">
                 <div className="mb-2">
                   Remaining time from your last harvest
                 </div>
-                <CountdownTimer />
+                <CountdownTimer timestamp={endTime} />
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
@@ -349,8 +368,8 @@ const IndexPage = (props: PageProps) => {
             )}
           </div>
         </div>
-        <div className="body-text">
-          <div className="my-5 max-w-xl mx-auto lg:mx-0">
+        <div className="body-text md:space-y-0 md:flex md:space-x-10 md:items-start">
+          <div className="my-5 md:my-0 max-w-xl mx-auto lg:mx-0">
             <h2>Nutritional Facts</h2>
             <NutritionalStat
               label="Daily Return"
@@ -359,22 +378,31 @@ const IndexPage = (props: PageProps) => {
               divider
             />
             <NutritionalStat label="APR" value="2920" symbol="%" divider />
-            <NutritionalStat label="Dev Fee" value="3" symbol="%" divider />
+            <NutritionalStat label="Dev Fee" value="2" symbol="%" divider />
+            <NutritionalStat label="Marketing" value="3" symbol="%" divider />
+            <NutritionalStat
+              label="Plant A Tree"
+              value="3"
+              symbol="%"
+              divider
+            />
           </div>
-          <h2>Referral Link</h2>
-          <p>
-            Earn 12% of the AVAX used to plant tree from anyone who uses your
-            referral link
-          </p>
-          <CopyToClipboard
-            title="Your Referral Link"
-            content={
-              account == null
-                ? "Connect your wallet to see your referral address"
-                : `${origin}/?ref=${account}`
-            }
-            canCopy={account != null}
-          />
+          <div>
+            <h2>Referral Link</h2>
+            <p>
+              Earn 12% of the AVAX used to plant tree from anyone who uses your
+              referral link
+            </p>
+            <CopyToClipboard
+              title="Your Referral Link"
+              content={
+                account == null
+                  ? "Connect your wallet to see your referral address"
+                  : `${origin}/?ref=${account}`
+              }
+              canCopy={account != null}
+            />
+          </div>
         </div>
       </Section>
     </main>
@@ -428,10 +456,12 @@ const NutritionalStat = (props: NutritionalStatProps) => {
         "!flex-row items-center space-x-2 !my-1": props.divider,
       })}
     >
-      <div className="text-[#575757] dark:text-[#E2E2E4]">{props.label}</div>
-      {props.divider && <div className="h-[1px] w-1/3 sm:w-20 bg-[#A2A5AB]" />}
+      <div className="text-[#575757] w-full dark:text-[#E2E2E4]">
+        {props.label}
+      </div>
+      {props.divider && <div className="h-[1px] w-full bg-[#A2A5AB]" />}
       <div
-        className={cls("text-[#575757] dark:text-[#E2E2E4]", {
+        className={cls("text-[#575757] w-full dark:text-[#E2E2E4]", {
           "text-xl font-medium text-[#5b6a81] !-mt-0.5": !props.divider,
         })}
       >

@@ -25,10 +25,11 @@ const getTimeMinutes = (time: number) =>
 const getTimeHours = (time: number) => ((time % daySeconds) / hourSeconds) | 0;
 const getTimeDays = (time: number) => (time / daySeconds) | 0;
 
-export default function CoundownTimer() {
+export default function CoundownTimer({ timestamp }: { timestamp: number }) {
   // These come from the blockchain
   const startTime = Date.now() / 1000; // use UNIX timestamp in seconds
-  const endTime = startTime + 243248; // use UNIX timestamp in seconds
+  const endTime = startTime + timestamp / 1000; // use UNIX timestamp in seconds
+  console.log(startTime + timestamp);
 
   const remainingTime = endTime - startTime;
   const days = Math.ceil(remainingTime / daySeconds);
