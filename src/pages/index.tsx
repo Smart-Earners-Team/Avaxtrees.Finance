@@ -35,6 +35,7 @@ const IndexPage = (props: PageProps) => {
   const [errorMsg, setErrorMsg] = useState("");
   const [daysOfReplant, setDaysOfReplant] = useState("0");
   const [endTime, setEndTime] = useState(0);
+  const [harvestDisabled, setHarvestDisabled] = useState(false);
 
   const {
     wallet: { balance },
@@ -199,6 +200,10 @@ const IndexPage = (props: PageProps) => {
     }
   }, [library, amountToPay]);
 
+  const disableHarvestButton = useCallback((state: boolean) => {
+    setHarvestDisabled(state);
+  }, []);
+
   const {
     location: { origin },
   } = props; // Page props
@@ -250,7 +255,10 @@ const IndexPage = (props: PageProps) => {
                 <div className="mb-2">
                   Remaining time from your last harvest
                 </div>
-                <CountdownTimer timestamp={endTime} />
+                <CountdownTimer
+                  timestamp={endTime}
+                  handleDisableButton={disableHarvestButton}
+                />
               </div>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5">
@@ -352,17 +360,20 @@ const IndexPage = (props: PageProps) => {
                       >
                         Re Plant
                       </Button>
-                      <Button
-                        onClick={handleHarvest}
-                        disabled={
-                          harvesting ||
-                          !active ||
-                          Number.parseFloat(avaxRewards) === 0
-                        }
-                        loading={harvesting}
-                      >
-                        Harvest
-                      </Button>
+                      {!harvestDisabled && (
+                        <Button
+                          onClick={handleHarvest}
+                          disabled={
+                            harvesting ||
+                            !active ||
+                            Number.parseFloat(avaxRewards) === 0 ||
+                            harvestDisabled
+                          }
+                          loading={harvesting}
+                        >
+                          Harvest
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -394,7 +405,7 @@ const IndexPage = (props: PageProps) => {
               divider
             />
           </div>
-          <div>
+          <div className="space-y-5">
             <h2>Referral Link</h2>
             <p>
               Earn 12% of the AVAX used to plant tree from anyone who uses your

@@ -28,7 +28,7 @@ export default function Link({
     return (
       <GatsbyLink
         to={to}
-        className={cls("hover:text-blue-500", linkClassName, className)}
+        className={cls("hover:text-[#c5ff3c]", linkClassName, className)}
         activeClassName={activeClassName}
         partiallyActive={partiallyActive}
         {...other}
@@ -42,7 +42,7 @@ export default function Link({
       href={to}
       rel="nofollow noreferrer noopener"
       target="_blank"
-      className={cls("hover:text-blue-500", linkClassName, className)}
+      className={cls("hover:text-[#c5ff3c]", linkClassName, className)}
       {...other}
     >
       {children}

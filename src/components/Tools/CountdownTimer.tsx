@@ -28,14 +28,18 @@ const getTimeDays = (time: number) => (time / daySeconds) | 0;
 
 export default React.memo(function CoundownTimer({
   timestamp,
+  handleDisableButton,
 }: {
   timestamp: number;
+  handleDisableButton: (state: boolean) => void;
 }) {
   // These come from the blockchain
   const startTime = Date.now() / 1000; // use UNIX timestamp in seconds
   const endTime = timestamp; // use UNIX timestamp in seconds
 
   const remainingTime = endTime - startTime;
+  console.log(remainingTime);
+
   const days = Math.ceil(remainingTime / daySeconds);
   const daysDuration = days * daySeconds;
 
@@ -56,7 +60,7 @@ export default React.memo(function CoundownTimer({
           )}
         </CountdownCircleTimer>
         <div className="text-xs mt-2" style={{ color: "#46ADAA" }}>
-          days
+          Days
         </div>
       </div>
       <div>
@@ -107,9 +111,13 @@ export default React.memo(function CoundownTimer({
           colors="#46ADAA"
           duration={minuteSeconds}
           initialRemainingTime={remainingTime % minuteSeconds}
-          onComplete={(totalElapsedTime) => ({
-            shouldRepeat: remainingTime - totalElapsedTime > 0,
-          })}
+          onComplete={(totalElapsedTime) => {
+            const repeat = remainingTime - totalElapsedTime > 0;
+            handleDisableButton(repeat);
+            return {
+              shouldRepeat: repeat,
+            };
+          }}
           key={uniqueId()}
         >
           {({ elapsedTime, color }) => (
