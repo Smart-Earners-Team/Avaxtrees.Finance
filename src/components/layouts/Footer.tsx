@@ -6,7 +6,10 @@ interface FooterProps extends React.ComponentProps<"footer"> {}
 
 export default function Footer(_props: FooterProps) {
   return (
-    <Section containerClass="bg-white rounded-full border-gray-300 border">
+    <Section
+      containerClass="my-10"
+      className="bg-white rounded-full border-gray-300 border"
+    >
       <footer
         className="text-center p-4 flex flex-col space-y-2 sm:flex-row sm:space-y-0 justify-between
           items-center font-medium text-base "
@@ -17,7 +20,7 @@ export default function Footer(_props: FooterProps) {
             <img src={ttebLogo} alt="TTEB Logo" width={70} height={40} />
           </a>
         </div>
-        <div>&copy; Spooky Rice - {new Date().getFullYear()}</div>
+        <div>&copy; Avaxtree.Finance - {new Date().getFullYear()}</div>
       </footer>
     </Section>
   );

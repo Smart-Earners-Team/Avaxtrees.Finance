@@ -7,6 +7,7 @@ import ModalProvider from "./Modal/ModalContext";
 import AppWalletProvider from "../contexts/AppContext";
 import { RefreshContextProvider } from "../contexts/RefreshContext";
 import Navbar from "./layouts/Navbar";
+import Footer from "./layouts/Footer";
 
 /**
  * This component is used to share state accross all sections of the site without unmounting on page
@@ -23,6 +24,7 @@ export default function AppWrapper(props: { children: React.ReactNode }) {
               <ModalProvider>
                 <Navbar />
                 {props.children}
+                <Footer />
               </ModalProvider>
             </IconContext.Provider>
           </AppWalletProvider>

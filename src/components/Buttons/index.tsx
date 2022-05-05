@@ -13,15 +13,18 @@ export default function Button({
   return (
     <button
       className={cls(
-        "rounded-md px-4 py-2 ring-1 bg-gray-300 text-gray-800 hover:bg-gray-400 ring-gray-400",
-        "disabled:cursor-not-allowed disabled:opacity-60 text-center",
+        "rounded-md px-4 py-2 ring-1 bg-[#FEF975] text-[#294B0F] hover:bg-[#f1eb34] ring-[#3C641D]",
+        "ring-3 disabled:cursor-not-allowed disabled:opacity-60 text-center border-none outline-none",
+        "font-medium",
         className
       )}
       {...props}
       title={label}
     >
       {children}
-      {loading && <RiLoaderLine className="animate-spin inline-block h-5 w-5 ml-1" />}
+      {loading && (
+        <RiLoaderLine className="animate-spin inline-block h-5 w-5 ml-1" />
+      )}
     </button>
   );
 }

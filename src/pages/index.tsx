@@ -9,7 +9,6 @@ import useToast from "../hooks/useToast";
 import { useAppContext } from "../hooks/useAppContext";
 import CopyToClipboard from "../components/Tools/CopyToClipboard";
 import { getRiceContract } from "../utils/contractHelpers";
-import Footer from "../components/layouts/Footer";
 import BigNumber from "bignumber.js";
 import { BIG_TEN } from "../utils/bigNumber";
 import { RefreshContext } from "../contexts/RefreshContext";
@@ -231,30 +230,30 @@ const IndexPage = (props: PageProps) => {
               />
             </div>
           </div>
-          <div className="w-full body-text mb-5">
+          <div className="w-full mb-5">
             {active ? (
-              <React.Fragment>
-                <div className="mt-6">
-                  <TextInput
-                    errorMsg={errorMsg}
-                    onChangeHandler={handleInputChange}
-                    value={amountToPay}
-                    onSubmit={handleCookRice}
-                    trx={cooking}
-                    isDisabled={
-                      cooking ||
-                      errorMsg.length > 0 ||
-                      Number.isNaN(Number.parseFloat(amountToPay))
-                    }
-                  />
-                </div>
-                <div className="p-5">
-                  <div className="space-x-3 flex justify-between items-center my-6">
+              <div
+                className="bg-[#132803]/90 md:bg-transparent p-3 md:p-0 rounded-xl
+                  md:rounded-none"
+              >
+                <TextInput
+                  errorMsg={errorMsg}
+                  onChangeHandler={handleInputChange}
+                  value={amountToPay}
+                  onSubmit={handleCookRice}
+                  trx={cooking}
+                  isDisabled={
+                    cooking ||
+                    errorMsg.length > 0 ||
+                    Number.isNaN(Number.parseFloat(amountToPay))
+                  }
+                />
+                <div className="p-3">
+                  <div className="space-x-3 flex justify-center items-center my-3">
                     <Button
                       onClick={handleReCookRice}
                       disabled={reCooking || !active}
                       loading={reCooking}
-                      className="!bg-transparent !text-green-600 !ring-green-600 hover:!bg-green-50"
                     >
                       Re-Cook
                     </Button>
@@ -262,13 +261,12 @@ const IndexPage = (props: PageProps) => {
                       onClick={handleEatRice}
                       disabled={eating || !active}
                       loading={eating}
-                      className="!bg-amber-500 !text-white !ring-amber-600 hover:!bg-amber-600"
                     >
                       Eat Rice
                     </Button>
                   </div>
                 </div>
-              </React.Fragment>
+              </div>
             ) : (
               <div className="p-3 text-center flex flex-col items-center space-y-3 rounded-xl">
                 <p>You will need to connect your wallet first</p>
@@ -277,11 +275,9 @@ const IndexPage = (props: PageProps) => {
             )}
           </div>
         </div>
-        <div className="lg:flex lg:justify-between mt-8">
-          <div className="my-10 lg:my-0 max-w-xl lg:max-w-xs mx-auto lg:mx-0">
-            <h2 className="text-red-900 text-center md:text-left">
-              Nutritional Facts
-            </h2>
+        <div className="body-text">
+          <div className="my-5 max-w-xl mx-auto lg:mx-0">
+            <h2>Nutritional Facts</h2>
             <NutritionalStat
               label="Daily Return"
               value="8"
@@ -291,8 +287,6 @@ const IndexPage = (props: PageProps) => {
             <NutritionalStat label="APR" value="2920" symbol="%" divider />
             <NutritionalStat label="Dev Fee" value="3" symbol="%" divider />
           </div>
-        </div>
-        <div className="body-text">
           <h2>Referral Link</h2>
           <p>
             Earn 12% of the AVAX used to cook rice from anyone who uses your
@@ -308,7 +302,6 @@ const IndexPage = (props: PageProps) => {
             canCopy={account != null}
           />
         </div>
-        <Footer />
       </Section>
     </main>
   );
@@ -398,65 +391,44 @@ const TextInput = ({
 }: TextInputProps) => {
   const hasError = errorMsg.length > 0;
   return (
-    <div className="max-w-sm w-full space-y-2 mx-auto">
-      <div>
-        <div className="mb-2 text-sm px-1">Deposit Amount</div>
-        <div className="relative">
-          <input
-            type="text"
-            className={cls(
-              "placeholder-gray-400 outline-none border-b border-[#7B8BA5] font-bold",
-              "transition-all duration-200 text-[#7B8BA5] p-1 disabled:opacity-70 text-xl",
-              "disabled:cursor-not-allowed block w-full bg-transparent text-right leading-none",
-              {
-                "text-red-400": hasError,
-              }
-            )}
-            placeholder="0"
-            value={value}
-            onChange={onChangeHandler}
-          />
-          <div
-            className="w-[40px] h-[40px] bg-white absolute bottom-2 left-0 rounded-full z-10
-              shadow-md"
-          >
-            <StaticImage
-              src="../images/icon.png"
-              alt=""
-              placeholder="blurred"
-              className="w-full h-full"
+    <div className="w-full space-y-2 mx-auto">
+      <div className="bg-white p-3 rounded-xl transition-transform duration-200 ease-linear">
+        <div>
+          <div className="mb-2 text-xs font-light">Deposit Amount</div>
+          <div className="relative flex items-center justify-between">
+            <input
+              type="text"
+              className={cls(
+                "placeholder-gray-400 outline-none border-b border-[#7B8BA5] font-bold",
+                "transition-all duration-200 text-[#7B8BA5] p-1 disabled:opacity-70 text-xl",
+                "disabled:cursor-not-allowed block w-full bg-transparent leading-none",
+                {
+                  "text-red-400": hasError,
+                }
+              )}
+              placeholder="0"
+              value={value}
+              onChange={onChangeHandler}
             />
+            <div className="flex-none flex items-center space-x-1 text-base">
+              <StaticImage
+                src="../images/icon.png"
+                alt=""
+                width={30}
+                height={30}
+                placeholder="blurred"
+              />{" "}
+              <span>AVAX</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div>
-        <input
-          type="text"
-          className={cls(
-            "placeholder-gray-400 outline-none border-none ring-2 ring-gray-200 font-normal",
-            "focus:ring-gray-300 focus-within:ring-gray-300 transition-all duration-200",
-            "text-gray-700 px-3 py-2 disabled:opacity-70 disabled:cursor-not-allowed",
-            "block w-full",
-            {
-              ["focus:!ring-transparent focus-within:!ring-transparent text-red-400 bg-red-50"]:
-                hasError,
-            }
-          )}
-          placeholder="0 AVAX"
-          value={value}
-          onChange={onChangeHandler}
-        />
-      </div>
-      <div
-        className={cls("text-center text-sm", { ["text-red-400"]: hasError })}
-      >
-        {errorMsg}
+        <div className={cls("text-sm", { ["text-red-400"]: hasError })}>
+          {errorMsg}
+        </div>
       </div>
       <Button
         onClick={onSubmit}
-        className="disabled:!opacity-40 disabled:cursor-not-allowed border-none !shadow-none !block
-          mx-auto text-base"
+        className="block mx-auto w-full"
         disabled={isDisabled}
         loading={trx}
       >
