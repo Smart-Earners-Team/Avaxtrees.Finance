@@ -268,7 +268,7 @@ const IndexPage = (props: PageProps) => {
                 </div>
               </div>
             ) : (
-              <div className="p-3 text-center flex flex-col items-center space-y-3 rounded-xl">
+              <div className="p-3 text-center flex flex-col items-center space-y-3 rounded-xl bg-white">
                 <p>You will need to connect your wallet first</p>
                 <ConnectWalletButton />
               </div>

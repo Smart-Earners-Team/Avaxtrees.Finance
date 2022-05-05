@@ -57,7 +57,7 @@ export default function Navbar() {
         <nav className={`${open ? "block" : "hidden"} lg:block`}>
           <ul className="flex flex-col flex-grow pb-4 lg:pb-0 lg:flex-row lg:justify-end lg:items-center">
             {navigationItems.map((nav) => (
-              <li key={nav.id} className="inline-block mt-2 lg:mt-0 lg:ml-3">
+              <li key={nav.id} className="inline-block mt-2 lg:mt-0 text-lg">
                 <Link
                   to={nav.href}
                   className="px-5 block py-3 font-semibold bg-transparent rounded-lg

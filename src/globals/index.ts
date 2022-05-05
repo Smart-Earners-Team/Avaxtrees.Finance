@@ -1,6 +1,11 @@
 export const navigationItems = [
   {
     id: 1,
+    title: "Stake",
+    href: "/stake",
+  },
+  {
+    id: 7,
     title: "Audit Report",
     href: "/#",
   },
