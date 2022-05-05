@@ -77,13 +77,13 @@ export default function AppContext({
               `You have connected to the wrong network.
                 Please switch to the ${networkList[usingChain].name} network`
             );
-            toastError(
-              `You have connected to the wrong network.
-                Please switch to the ${networkList[usingChain].name} network`
-            );
             setError(
               new Error(`You have connected to the wrong network.
               Please switch to the ${networkList[usingChain].name} network`)
+            );
+            toastError(
+              `You have connected to the wrong network.
+                Please switch to the ${networkList[usingChain].name} network`
             );
           }
         });

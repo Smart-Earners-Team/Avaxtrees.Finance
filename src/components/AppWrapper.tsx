@@ -17,16 +17,16 @@ export default function AppWrapper(props: { children: React.ReactNode }) {
     <Web3ReactProvider getLibrary={getLibrary}>
       <ToastsProvider>
         <ToastListener />
-        <ModalProvider>
-          <IconContext.Provider value={{ className: "w-6 h-6" }}>
-            <RefreshContextProvider>
-              <AppWalletProvider>
+        <RefreshContextProvider>
+          <AppWalletProvider>
+            <IconContext.Provider value={{ className: "w-6 h-6" }}>
+              <ModalProvider>
                 <Navbar />
                 {props.children}
-              </AppWalletProvider>
-            </RefreshContextProvider>
-          </IconContext.Provider>
-        </ModalProvider>
+              </ModalProvider>
+            </IconContext.Provider>
+          </AppWalletProvider>
+        </RefreshContextProvider>
       </ToastsProvider>
     </Web3ReactProvider>
   );
