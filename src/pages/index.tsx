@@ -217,9 +217,9 @@ const IndexPage = (props: PageProps) => {
             <p>PS:- Please read the Tree Paper for more information.</p>
           </div>
         </div>
-        <div className="flex flex-col-reverse md:flex-row justify-between my-10 md:space-x-10">
-          <div className="w-full">
-            <div className="rounded-lg py-2 px-4 bg-white max-w-sm">
+        <div className="flex flex-col-reverse md:flex-row justify-center my-10 md:space-x-10">
+          <div className="w-full max-w-sm">
+            <div className="rounded-lg py-2 px-4 bg-white">
               <div className="font-light text-center">
                 <div className="mb-2">
                   Remaining time from your last harvest
@@ -241,12 +241,12 @@ const IndexPage = (props: PageProps) => {
               />
             </div>
           </div>
-          <div className="w-full max-w-md mb-5">
+          <div className="w-full max-w-md mb-3">
             {active ? (
               <Fragment>
                 <div
                   className="flex flex-col md:flex-row items-center space-y-3 md:space-y-0
-                  md:space-x-3 mb-10"
+                  md:space-x-3 mb-5"
                 >
                   <MetricChip
                     label="Your Planted Trees"
