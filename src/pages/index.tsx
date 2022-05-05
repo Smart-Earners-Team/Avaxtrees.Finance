@@ -22,6 +22,7 @@ import { PageProps } from "gatsby";
 import { getFullDisplayBalance } from "../utils/formatBalance";
 import { StaticImage } from "gatsby-plugin-image";
 import SEO from "../components/SEO";
+import CountdownTimer from "../components/Tools/CoundownTimer";
 
 const IndexPage = (props: PageProps) => {
   const [amountToPay, setAmountToPay] = useState("");
@@ -222,9 +223,14 @@ const IndexPage = (props: PageProps) => {
             <p>PS:- Please read the Tree Paper for more information.</p>
           </div>
         </div>
-        <div className="flex flex-col-reverse md:flex-row justify-between my-10 md:space-x-3">
+        <div className="flex flex-col-reverse md:flex-row justify-between my-10 md:space-x-10">
           <div className="w-full">
-            <div className="rounded-xl p-10 bg-white"></div>
+            <div className="rounded-lg py-1 px-4 bg-white">
+              <div className="font-light text-center">
+                Remaining time from your last harvest
+                <CountdownTimer />
+              </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
               <MetricChip
                 label="Contract Balance"
@@ -239,7 +245,7 @@ const IndexPage = (props: PageProps) => {
               />
             </div>
           </div>
-          <div className="w-full mb-5">
+          <div className="w-full max-w-md mb-5">
             {active ? (
               <Fragment>
                 <div
@@ -296,7 +302,7 @@ const IndexPage = (props: PageProps) => {
                 </div>
               </Fragment>
             ) : (
-              <div className="p-3 text-center flex flex-col items-center space-y-3 rounded-xl bg-white">
+              <div className="p-3 text-center flex flex-col items-center space-y-3 rounded-lg bg-white">
                 <p>You will need to connect your wallet first</p>
                 <ConnectWalletButton />
               </div>
@@ -349,7 +355,7 @@ const MetricChip = ({
   borderColorClassName,
 }: MetricChipProps) => {
   return (
-    <div className="bg-white py-2 px-3 space-y-1 rounded-xl text-base inline-block w-full">
+    <div className="bg-white py-2 px-3 space-y-1 rounded-lg text-base inline-block w-full">
       <div className="flex items-center text-xs space-x-1">
         <StaticImage
           alt=""
@@ -423,7 +429,7 @@ const TextInput = ({
   } = useAppContext();
   return (
     <div className="w-full space-y-2 mx-auto">
-      <div className="bg-white p-3 rounded-xl transition-transform duration-200 ease-linear">
+      <div className="bg-white p-3 rounded-lg transition-transform duration-200 ease-linear">
         <div>
           <div className="mb-2 text-xs font-light">Deposit Amount</div>
           <div className="relative flex items-center justify-between space-x-1">
