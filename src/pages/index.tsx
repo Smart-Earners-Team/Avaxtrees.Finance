@@ -100,8 +100,6 @@ const IndexPage = (props: PageProps) => {
 
         const amount = new BigNumber(val);
         const bal = new BigNumber(balance);
-        // const bal = Number.parseFloat("100");
-
         if (amount.isGreaterThan(bal)) {
           setErrorMsg("Insufficient funds in your wallet");
         } else {
@@ -317,14 +315,22 @@ const IndexPage = (props: PageProps) => {
                     <div className="space-x-3 flex justify-center items-center my-3">
                       <Button
                         onClick={handleReCookRice}
-                        disabled={reCooking || !active}
+                        disabled={
+                          reCooking ||
+                          !active ||
+                          Number.parseFloat(avaxRewards) === 0
+                        }
                         loading={reCooking}
                       >
                         Re Plant
                       </Button>
                       <Button
                         onClick={handleEatRice}
-                        disabled={eating || !active}
+                        disabled={
+                          eating ||
+                          !active ||
+                          Number.parseFloat(avaxRewards) === 0
+                        }
                         loading={eating}
                       >
                         Harvest
