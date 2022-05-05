@@ -15,6 +15,7 @@ import { RefreshContext } from "../contexts/RefreshContext";
 import { PageProps } from "gatsby";
 import { getFullDisplayBalance } from "../utils/formatBalance";
 import { StaticImage } from "gatsby-plugin-image";
+import SEO from "../components/SEO";
 
 const IndexPage = (props: PageProps) => {
   const [amountToPay, setAmountToPay] = useState("");
@@ -177,6 +178,10 @@ const IndexPage = (props: PageProps) => {
 
   return (
     <main className="min-h-screen w-full">
+      <SEO
+        description="Plant a tree with a minimum of 0.1 AVAX, earn 8% daily returns. This
+          is a complete ecosystem."
+      />
       <Section noPadding={false}>
         <div className="body-text mx-auto">
           <h1>Plant a Tree</h1>
@@ -193,8 +198,8 @@ const IndexPage = (props: PageProps) => {
             To stake Tree token and start earning $FERT, check out the staking
             page.
           </p>
-          <h2>Now There is a Rule!</h2>
-          <div className="space-y-3 text-base">
+          <div className="!mt-10 space-y-3 text-base text-gray-100">
+            <h2 className="text-white">Now There is a Rule!</h2>
             <p>
               # To maintain a green ecosystem, you should re-plant trees at
               least 6 days days and harvest your earned crop every 7th day. This

@@ -4,6 +4,7 @@ import path from "path";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `Avax Trees`,
+    description: "About AVAX Trees",
     siteUrl: `https://avaxtrees.finance`,
   },
   plugins: [
