@@ -13,8 +13,8 @@ export default function Button({
   return (
     <button
       className={cls(
-        "rounded-md px-4 py-2 ring-1 bg-[#FEF975] text-[#294B0F] hover:bg-[#f1eb34] ring-[#3C641D]",
-        "ring-3 disabled:cursor-not-allowed disabled:opacity-60 text-center border-none outline-none",
+        "rounded-md px-4 py-2 bg-[#FEF975] text-[#294B0F] hover:bg-[#f1eb34] ring-[#3C641D]",
+        "ring-2 disabled:cursor-not-allowed disabled:opacity-60 text-center border-none outline-none",
         "font-medium",
         className
       )}

@@ -255,14 +255,14 @@ const IndexPage = (props: PageProps) => {
                       disabled={reCooking || !active}
                       loading={reCooking}
                     >
-                      Re-Cook
+                      Re Plant
                     </Button>
                     <Button
                       onClick={handleEatRice}
                       disabled={eating || !active}
                       loading={eating}
                     >
-                      Eat Rice
+                      Harvest
                     </Button>
                   </div>
                 </div>
@@ -289,7 +289,7 @@ const IndexPage = (props: PageProps) => {
           </div>
           <h2>Referral Link</h2>
           <p>
-            Earn 12% of the AVAX used to cook rice from anyone who uses your
+            Earn 12% of the AVAX used to plant tree from anyone who uses your
             referral link
           </p>
           <CopyToClipboard
@@ -432,7 +432,7 @@ const TextInput = ({
         disabled={isDisabled}
         loading={trx}
       >
-        Cook Rice
+        Plant A Tree
       </Button>
     </div>
   );

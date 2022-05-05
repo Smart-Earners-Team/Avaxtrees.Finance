@@ -31,20 +31,23 @@ export default function CopyToClipboard({
   }, [codeElement, canCopy]);
 
   return (
-    <div className="relative w-full my-3 border-b-2 border-red-50 bg-white">
-      <div className="bg-red-50 px-4 py-1 flex justify-between items-center">
+    <div
+      className="relative w-full my-3 border-b-2 border-red-50 bg-white text-[#132803]
+      font-medium"
+    >
+      <div className="bg-[#FEF975] px-4 py-1 flex justify-between items-center">
         <div className="inline-block text-base">{title}</div>
         {canCopy && (
           <button
             onClick={copyAddress}
-            className="text-base font-medium underline text-red-900 inline-block float-right"
+            className="text-base underline inline-block float-right"
           >
             {copied ? "Copied!" : "Click to copy"}
           </button>
         )}
       </div>
       <pre
-        className="w-full text-sm md:text-base p-4 overflow-x-auto"
+        className="w-full text-base p-4 overflow-x-auto"
         ref={codeElement}
         onClick={copyAddress}
       >
