@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
+import { ConnectorNames } from "../components/WalletModal/types";
 import { injected } from "../utils/web3React";
 import useActiveWeb3React from "./useActiveWeb3React";
+import useAuth from "./useAuth";
 
 export function useEagerConnect() {
-  const { activate, active } = useActiveWeb3React();
+  const { active } = useActiveWeb3React();
+  const { login } = useAuth();
 
   const [tried, setTried] = useState(false);
 
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized) => {
       if (isAuthorized) {
-        activate(injected, undefined, true).catch(() => {
-          setTried(true);
-        });
+        login(ConnectorNames.Injected);
+        setTried(true);
       } else {
         setTried(true);
       }
     });
-  }, [activate]);
+  }, [login]);
 
   useEffect(() => {
     if (!tried && active) {

@@ -53,7 +53,8 @@ export default function AppContext({
   children: React.ReactNode;
 }) {
   const [isConnecting, setIsConnecting] = useState(false);
-  const { deactivate, active, error, account, library } = useActiveWeb3React();
+  const { deactivate, active, error, account, library, setError } =
+    useActiveWeb3React();
   const { fast } = useContext(RefreshContext);
   const { toastError } = useToast();
   // get wallet balance in bnb
@@ -80,12 +81,16 @@ export default function AppContext({
               `You have connected to the wrong network.
                 Please switch to the ${networkList[usingChain].name} network`
             );
+            setError(
+              new Error(`You have connected to the wrong network.
+              Please switch to the ${networkList[usingChain].name} network`)
+            );
           }
         });
       }
     };
     checkUserNetwork();
-  }, [library]);
+  }, [library, setError]);
 
   useEffect(() => {
     if (active) {
