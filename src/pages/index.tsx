@@ -47,17 +47,22 @@ const IndexPage = (props: PageProps) => {
 
   useEffect(() => {
     const runTest = async () => {
-      if (library && account) {
-        const contract = getTreeContract(library.getSigner());
-        const { _hex: time } = await contract.getUnlockTime(account);
-        const timestamp = new BigNumber(time).toNumber();
-        setEndTime(timestamp);
+      if (account) {
+        try {
+          const contract = getTreeContract();
+          const { _hex: time } = await contract.getUnlockTime(account);
+          const timestamp = new BigNumber(time).toNumber();
+          setEndTime(timestamp);
+        } catch (err) {
+          // console.error(err)
+          setEndTime(0);
+        }
       } else {
         setEndTime(0);
       }
     };
     runTest();
-  }, [library, account, fast]);
+  }, [account, fast]);
 
   // Get AVAX Balance in the contract
   useEffect(() => {
@@ -248,7 +253,7 @@ const IndexPage = (props: PageProps) => {
                 <CountdownTimer timestamp={endTime} />
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mt-5">
               <MetricChip
                 label="Contract Balance"
                 value={contractBal}
@@ -280,12 +285,12 @@ const IndexPage = (props: PageProps) => {
               />
             </div>
           </div>
-          <div className="w-full max-w-md mb-3">
+          <div className="w-full max-w-md mb-3 mx-auto">
             {active ? (
               <Fragment>
                 <div
-                  className="flex flex-col md:flex-row items-center space-y-3 md:space-y-0
-                  md:space-x-3 mb-5"
+                  className="flex flex-col lg:flex-row items-center space-y-3 lg:space-y-0
+                  lg:space-x-3 mb-5"
                 >
                   <MetricChip
                     label="Your Planted Trees"
