@@ -1,28 +1,53 @@
 import type { GatsbyConfig } from "gatsby";
+import path from "path";
 
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `Avax Trees`,
-    siteUrl: `https://www.yourdomain.tld`
+    siteUrl: `https://avaxtrees.finance`,
   },
-  plugins: [{
-    resolve: 'gatsby-plugin-google-analytics',
-    options: {
-      "trackingId": "Google_ID"
-    }
-  }, "gatsby-plugin-image", "gatsby-plugin-react-helmet", "gatsby-plugin-sitemap", {
-    resolve: 'gatsby-plugin-manifest',
-    options: {
-      "icon": "src/images/icon.png"
-    }
-  }, "gatsby-plugin-sharp", "gatsby-transformer-sharp", {
-    resolve: 'gatsby-source-filesystem',
-    options: {
-      "name": "images",
-      "path": "./src/images/"
+  plugins: [
+    {
+      resolve: "gatsby-plugin-google-analytics",
+      options: {
+        trackingId: "Google_ID",
+      },
     },
-    __key: "images"
-  }]
+    "gatsby-plugin-image",
+    "gatsby-plugin-react-helmet",
+    "gatsby-plugin-sitemap",
+    {
+      resolve: "gatsby-plugin-manifest",
+      options: {
+        icon: "src/images/icon.png",
+      },
+    },
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: "images",
+        path: "./src/images/",
+      },
+      //@ts-ignore
+      __key: "images",
+    },
+    {
+      resolve: "gatsby-plugin-layout",
+      options: {
+        component: path.resolve("./src/components/AppWrapper.tsx"),
+      },
+    },
+    {
+      resolve: "gatsby-plugin-nprogress",
+      options: {
+        color: "rgb(37, 99, 235)",
+        showSpinner: false,
+      },
+    },
+    "gatsby-plugin-netlify",
+  ],
 };
 
 export default config;

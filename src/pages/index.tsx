@@ -1,179 +1,468 @@
-import * as React from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import Section from "../components/layouts/Section";
+import ConnectWalletButton from "../components/Buttons/ConnectWalletButton";
+import useActiveWeb3React from "../hooks/useActiveWeb3React";
+import cls from "classnames";
+import Button from "../components/Buttons";
+import { reCookRice, eatRice, cookRice } from "../utils/calls";
+import useToast from "../hooks/useToast";
+import { useAppContext } from "../hooks/useAppContext";
+import CopyToClipboard from "../components/Tools/CopyToClipboard";
+import { getRiceContract } from "../utils/contractHelpers";
+import Footer from "../components/layouts/Footer";
+import BigNumber from "bignumber.js";
+import { BIG_TEN } from "../utils/bigNumber";
+import { RefreshContext } from "../contexts/RefreshContext";
+import { PageProps } from "gatsby";
+import { getFullDisplayBalance } from "../utils/formatBalance";
+import { StaticImage } from "gatsby-plugin-image";
 
-// styles
-const pageStyles = {
-  color: "#232129",
-  padding: 96,
-  fontFamily: "-apple-system, Roboto, sans-serif, serif",
-}
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-}
-const headingAccentStyles = {
-  color: "#663399",
-}
-const paragraphStyles = {
-  marginBottom: 48,
-}
-const codeStyles = {
-  color: "#8A6534",
-  padding: 4,
-  backgroundColor: "#FFF4DB",
-  fontSize: "1.25rem",
-  borderRadius: 4,
-}
-const listStyles = {
-  marginBottom: 96,
-  paddingLeft: 0,
-}
-const listItemStyles = {
-  fontWeight: 300,
-  fontSize: 24,
-  maxWidth: 560,
-  marginBottom: 30,
-}
+const IndexPage = (props: PageProps) => {
+  const [amountToPay, setAmountToPay] = useState("");
+  const [contractBal, setContractBal] = useState("0");
+  const [riceBal, setRiceBal] = useState("0");
+  const [reCooking, setReCooking] = useState(false);
+  const [cooking, setCooking] = useState(false);
+  const [avaxRewards, setAvaxRewards] = useState("0");
+  const [eating, setEating] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-const linkStyle = {
-  color: "#8954A8",
-  fontWeight: "bold",
-  fontSize: 16,
-  verticalAlign: "5%",
-}
+  const {
+    wallet: { balance },
+    triggerFetchTokens,
+    refAddress,
+  } = useAppContext();
+  const { active, library, account } = useActiveWeb3React();
+  const { toastError, toastSuccess } = useToast();
+  const { fast } = useContext(RefreshContext);
 
-const docLinkStyle = {
-  ...linkStyle,
-  listStyleType: "none",
-  marginBottom: 24,
-}
+  // Get AVAX Balance in the contract
+  useEffect(() => {
+    (async () => {
+      const contract = getRiceContract();
+      try {
+        const { _hex } = await contract.getBalance();
+        const bal = new BigNumber(_hex).div(BIG_TEN.pow(18));
+        setContractBal(bal.toJSON());
+      } catch (err) {
+        setContractBal("0");
+      }
+    })();
+  }, [library, riceBal, balance, avaxRewards]);
 
-const descriptionStyle = {
-  color: "#232129",
-  fontSize: 14,
-  marginTop: 10,
-  marginBottom: 0,
-  lineHeight: 1.25,
-}
+  // Get User Rice and avax rewards
+  useEffect(() => {
+    (async () => {
+      if (account && library) {
+        const contract = getRiceContract(library.getSigner());
+        try {
+          // User rice bal
+          const { _hex: myRice } = await contract.getMyMiners(account);
+          const rice = new BigNumber(myRice).toJSON(); // How many decimals?
+          // User rwards in avax
+          const { _hex: riceForRewards } = await contract.getMyRice(account);
+          const { _hex: avaxRewards } = await contract.calculateRiceSell(
+            riceForRewards
+          );
+          const avax = getFullDisplayBalance(
+            new BigNumber(avaxRewards),
+            18,
+            18
+          );
 
-const docLink = {
-  text: "TypeScript Documentation",
-  url: "https://www.gatsbyjs.com/docs/how-to/custom-configuration/typescript/",
-  color: "#8954A8",
-}
+          setRiceBal(rice);
+          setAvaxRewards(avax);
+        } catch (err) {
+          console.error(err);
+          setRiceBal("0");
+          setAvaxRewards("0");
+        }
+      } else {
+        setRiceBal("0");
+        setAvaxRewards("0");
+      }
+    })();
+  }, [account, library, contractBal, balance, fast, active]);
 
-const badgeStyle = {
-  color: "#fff",
-  backgroundColor: "#088413",
-  border: "1px solid #088413",
-  fontSize: 11,
-  fontWeight: "bold",
-  letterSpacing: 1,
-  borderRadius: 4,
-  padding: "4px 6px",
-  display: "inline-block",
-  position: "relative" as "relative",
-  top: -2,
-  marginLeft: 10,
-  lineHeight: 1,
-}
+  const handleInputChange: React.FormEventHandler<HTMLInputElement> =
+    useCallback(
+      async (e) => {
+        const val = e.currentTarget.value.replace(/,/g, ".");
+        const pattern = /^[0-9]*[.,]?[0-9]{0,18}$/g;
+        if (!pattern.test(val)) return;
 
-// data
-const links = [
-  {
-    text: "Tutorial",
-    url: "https://www.gatsbyjs.com/docs/tutorial/",
-    description:
-      "A great place to get started if you're new to web development. Designed to guide you through setting up your first Gatsby site.",
-    color: "#E95800",
-  },
-  {
-    text: "How to Guides",
-    url: "https://www.gatsbyjs.com/docs/how-to/",
-    description:
-      "Practical step-by-step guides to help you achieve a specific goal. Most useful when you're trying to get something done.",
-    color: "#1099A8",
-  },
-  {
-    text: "Reference Guides",
-    url: "https://www.gatsbyjs.com/docs/reference/",
-    description:
-      "Nitty-gritty technical descriptions of how Gatsby works. Most useful when you need detailed information about Gatsby's APIs.",
-    color: "#BC027F",
-  },
-  {
-    text: "Conceptual Guides",
-    url: "https://www.gatsbyjs.com/docs/conceptual/",
-    description:
-      "Big-picture explanations of higher-level Gatsby concepts. Most useful for building understanding of a particular topic.",
-    color: "#0D96F2",
-  },
-  {
-    text: "Plugin Library",
-    url: "https://www.gatsbyjs.com/plugins",
-    description:
-      "Add functionality and customize your Gatsby site or app with thousands of plugins built by our amazing developer community.",
-    color: "#8EB814",
-  },
-  {
-    text: "Build and Host",
-    url: "https://www.gatsbyjs.com/cloud",
-    badge: true,
-    description:
-      "Now you’re ready to show the world! Give your Gatsby site superpowers: Build and host on Gatsby Cloud. Get started for free!",
-    color: "#663399",
-  },
-]
+        const amount = new BigNumber(val);
+        const bal = new BigNumber(balance);
+        // const bal = Number.parseFloat("100");
 
-// markup
-const IndexPage = () => {
+        if (amount.isGreaterThan(bal)) {
+          setErrorMsg("Insufficient funds in your wallet");
+        } else {
+          setErrorMsg("");
+        }
+        setAmountToPay(val);
+      },
+      [balance]
+    );
+
+  const handleReCookRice = useCallback(async () => {
+    if (library) {
+      setReCooking(true);
+      try {
+        await reCookRice(refAddress, library.getSigner());
+        toastSuccess("Success", "Your Rice has been re-cooked");
+        triggerFetchTokens();
+      } catch (err) {
+        // console.error(err);
+        toastError(
+          "Error",
+          "Something went wrong while trying to perform the transaction."
+        );
+      } finally {
+        setReCooking(false);
+      }
+    }
+  }, [library, refAddress]);
+
+  const handleCookRice = useCallback(async () => {
+    if (library) {
+      setCooking(true);
+      try {
+        await cookRice(amountToPay, refAddress, library.getSigner());
+        toastSuccess(
+          "Success",
+          "Your Rice is cooking now, sit back and relax."
+        );
+        triggerFetchTokens();
+        setAmountToPay("");
+      } catch (err) {
+        console.error(err);
+        toastError(
+          "Error",
+          "Something went wrong while trying to perform the transaction."
+        );
+      } finally {
+        setCooking(false);
+      }
+    }
+  }, [library, amountToPay, refAddress]);
+
+  const handleEatRice = useCallback(async () => {
+    if (library) {
+      setEating(true);
+      try {
+        await eatRice(library.getSigner());
+        toastSuccess("Success", "Enjoying your rice? Smile.");
+        triggerFetchTokens();
+      } catch (err) {
+        console.error(err);
+        toastError(
+          "Error",
+          "Something went wrong while trying to perform the transaction."
+        );
+      } finally {
+        setEating(false);
+      }
+    }
+  }, [library, amountToPay]);
+
+  // Can start video
+  /* const canStart = useCallback(
+    () => Number.parseFloat(riceBal) > 0,
+    [riceBal, account, active, library]
+  ); */
+
+  const {
+    location: { origin },
+  } = props; // Page props
+
   return (
-    <main style={pageStyles}>
-      <title>Home Page</title>
-      <h1 style={headingStyles}>
-        Congratulations
-        <br />
-        <span style={headingAccentStyles}>— you just made a Gatsby site! </span>
-        🎉🎉🎉
-      </h1>
-      <p style={paragraphStyles}>
-        Edit <code style={codeStyles}>src/pages/index.tsx</code> to see this page
-        update in real-time. 😎
-      </p>
-      <ul style={listStyles}>
-        <li style={docLinkStyle}>
-          <a
-            style={linkStyle}
-            href={`${docLink.url}?utm_source=starter&utm_medium=ts-docs&utm_campaign=minimal-starter-ts`}
-          >
-            {docLink.text}
-          </a>
-        </li>
-        {links.map(link => (
-          <li key={link.url} style={{ ...listItemStyles, color: link.color }}>
-            <span>
-              <a
-                style={linkStyle}
-                href={`${link.url}?utm_source=starter&utm_medium=start-page&utm_campaign=minimal-starter-ts`}
-              >
-                {link.text}
-              </a>
-              {link.badge && (
-                <span style={badgeStyle} aria-label="New Badge">
-                  NEW!
-                </span>
-              )}
-              <p style={descriptionStyle}>{link.description}</p>
-            </span>
-          </li>
-        ))}
-      </ul>
-      <img
-        alt="Gatsby G Logo"
-        src="data:image/svg+xml,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2a10 10 0 110 20 10 10 0 010-20zm0 2c-3.73 0-6.86 2.55-7.75 6L14 19.75c3.45-.89 6-4.02 6-7.75h-5.25v1.5h3.45a6.37 6.37 0 01-3.89 4.44L6.06 9.69C7 7.31 9.3 5.63 12 5.63c2.13 0 4 1.04 5.18 2.65l1.23-1.06A7.959 7.959 0 0012 4zm-8 8a8 8 0 008 8c.04 0 .09 0-8-8z' fill='%23639'/%3E%3C/svg%3E"
-      />
+    <main className="min-h-screen w-full">
+      <Section noPadding={false}>
+        <div className="body-text mx-auto">
+          <h1>Plant a Tree</h1>
+          <p>
+            Plant a tree with a minimum of 0.1 AVAX, earn 8% daily returns. This
+            is a complete ecosystem.
+          </p>
+          <p>
+            Chickens eat eat rice($SOYA) and drop $FERT which in turn helps
+            $TREE's to grow. For every 10,000 $TREE token sold, we plant a tree
+            in Africa.
+          </p>
+          <p>
+            To stake Tree token and start earning $FERT, check out the staking
+            page.
+          </p>
+          <h2>Now There is a Rule!</h2>
+          <div className="space-y-3 text-base">
+            <p>
+              # To maintain a green ecosystem, you should re-plant trees at
+              least 6 days days and harvest your earned crop every 7th day. This
+              means after you plant a tree (deposit) You should not harvest
+              until you have replanted for 6 days
+            </p>
+            <p>
+              # Any withdrawal done when the compounding days is less than 6
+              would be taxed 60% which will remain in the ecosystem.
+            </p>
+            <p>
+              # After every harvest, there is a 6-day cool down time period.
+            </p>
+            <p>PS:- Please read the Tree Paper for more information.</p>
+          </div>
+        </div>
+        <div className="flex flex-col-reverse md:flex-row justify-between my-10 md:space-x-3">
+          <div className="w-full">
+            <div className="rounded-xl p-10 bg-white"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5">
+              <MetricChip label="Contract" value={contractBal} symbol="AVAX" />
+              <MetricChip label="Wallet" value={balance} symbol="AVAX" />
+              <MetricChip label="Your Rice" value={riceBal} symbol="Rice" />
+              <MetricChip
+                label="Your Rewards"
+                value={avaxRewards}
+                symbol="AVAX"
+              />
+              <MetricChip
+                label="Your Rewards"
+                value={avaxRewards}
+                symbol="AVAX"
+              />
+            </div>
+          </div>
+          <div className="w-full body-text mb-5">
+            {active ? (
+              <React.Fragment>
+                <div className="mt-6">
+                  <TextInput
+                    errorMsg={errorMsg}
+                    onChangeHandler={handleInputChange}
+                    value={amountToPay}
+                    onSubmit={handleCookRice}
+                    trx={cooking}
+                    isDisabled={
+                      cooking ||
+                      errorMsg.length > 0 ||
+                      Number.isNaN(Number.parseFloat(amountToPay))
+                    }
+                  />
+                </div>
+                <div className="p-5">
+                  <div className="space-x-3 flex justify-between items-center my-6">
+                    <Button
+                      onClick={handleReCookRice}
+                      disabled={reCooking || !active}
+                      loading={reCooking}
+                      className="!bg-transparent !text-green-600 !ring-green-600 hover:!bg-green-50"
+                    >
+                      Re-Cook
+                    </Button>
+                    <Button
+                      onClick={handleEatRice}
+                      disabled={eating || !active}
+                      loading={eating}
+                      className="!bg-amber-500 !text-white !ring-amber-600 hover:!bg-amber-600"
+                    >
+                      Eat Rice
+                    </Button>
+                  </div>
+                </div>
+              </React.Fragment>
+            ) : (
+              <div className="p-3 text-center flex flex-col items-center space-y-3 rounded-xl">
+                <p>You will need to connect your wallet first</p>
+                <ConnectWalletButton />
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="lg:flex lg:justify-between mt-8">
+          <div className="my-10 lg:my-0 max-w-xl lg:max-w-xs mx-auto lg:mx-0">
+            <h2 className="text-red-900 text-center md:text-left">
+              Nutritional Facts
+            </h2>
+            <NutritionalStat
+              label="Daily Return"
+              value="8"
+              symbol="%"
+              divider
+            />
+            <NutritionalStat label="APR" value="2920" symbol="%" divider />
+            <NutritionalStat label="Dev Fee" value="3" symbol="%" divider />
+          </div>
+        </div>
+        <div className="body-text">
+          <h2>Referral Link</h2>
+          <p>
+            Earn 12% of the AVAX used to cook rice from anyone who uses your
+            referral link
+          </p>
+          <CopyToClipboard
+            title="Your Referral Link"
+            content={
+              account == null
+                ? "Connect your wallet to see your referral address"
+                : `${origin}/?ref=${account}`
+            }
+            canCopy={account != null}
+          />
+        </div>
+        <Footer />
+      </Section>
     </main>
-  )
+  );
+};
+
+interface MetricChipProps {
+  label: string;
+  value: string;
+  symbol: string;
+  borderColorClassName?: string;
 }
 
-export default IndexPage
+const MetricChip = ({
+  label,
+  value,
+  symbol,
+  borderColorClassName,
+}: MetricChipProps) => {
+  return (
+    <div className="bg-white py-2 px-3 space-y-2 rounded-xl text-base">
+      <div className="flex items-center text-xs space-x-1">
+        <StaticImage
+          alt=""
+          src="../images/icon.png"
+          width={15}
+          height={15}
+          placeholder="blurred"
+        />
+        <span>{symbol}</span>
+      </div>
+      <div
+        className={cls("border-l-4 pl-3", borderColorClassName, {
+          "border-red-500": !borderColorClassName,
+        })}
+      >
+        <div className="font-medium">{label}</div>
+        <div className="font-light -mt-1">{value}</div>
+      </div>
+    </div>
+  );
+};
+
+interface NutritionalStatProps {
+  label: string;
+  value: string;
+  symbol: string;
+  divider?: boolean;
+}
+
+const NutritionalStat = (props: NutritionalStatProps) => {
+  return (
+    <div
+      className={cls("flex flex-col text-base space-y-0.5 my-3", {
+        "!flex-row items-center space-x-2 !my-1": props.divider,
+      })}
+    >
+      <div className="text-[#575757] dark:text-[#E2E2E4]">{props.label}</div>
+      {props.divider && <div className="h-[1px] w-1/3 sm:w-20 bg-[#A2A5AB]" />}
+      <div
+        className={cls("text-[#575757] dark:text-[#E2E2E4]", {
+          "text-xl font-medium text-[#5b6a81] !-mt-0.5": !props.divider,
+        })}
+      >
+        {props.value}{" "}
+        <span className="font-light !text-lg">{props.symbol}</span>
+      </div>
+    </div>
+  );
+};
+
+interface TextInputProps {
+  errorMsg: string;
+  onChangeHandler: (e: React.FormEvent<HTMLInputElement>) => void;
+  onSubmit: () => void;
+  value: string;
+  isDisabled: boolean;
+  trx: boolean; // transaction
+}
+
+const TextInput = ({
+  onChangeHandler,
+  onSubmit,
+  errorMsg,
+  value,
+  isDisabled,
+  trx,
+}: TextInputProps) => {
+  const hasError = errorMsg.length > 0;
+  return (
+    <div className="max-w-sm w-full space-y-2 mx-auto">
+      <div>
+        <div className="mb-2 text-sm px-1">Deposit Amount</div>
+        <div className="relative">
+          <input
+            type="text"
+            className={cls(
+              "placeholder-gray-400 outline-none border-b border-[#7B8BA5] font-bold",
+              "transition-all duration-200 text-[#7B8BA5] p-1 disabled:opacity-70 text-xl",
+              "disabled:cursor-not-allowed block w-full bg-transparent text-right leading-none",
+              {
+                "text-red-400": hasError,
+              }
+            )}
+            placeholder="0"
+            value={value}
+            onChange={onChangeHandler}
+          />
+          <div
+            className="w-[40px] h-[40px] bg-white absolute bottom-2 left-0 rounded-full z-10
+              shadow-md"
+          >
+            <StaticImage
+              src="../images/icon.png"
+              alt=""
+              placeholder="blurred"
+              className="w-full h-full"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <input
+          type="text"
+          className={cls(
+            "placeholder-gray-400 outline-none border-none ring-2 ring-gray-200 font-normal",
+            "focus:ring-gray-300 focus-within:ring-gray-300 transition-all duration-200",
+            "text-gray-700 px-3 py-2 disabled:opacity-70 disabled:cursor-not-allowed",
+            "block w-full",
+            {
+              ["focus:!ring-transparent focus-within:!ring-transparent text-red-400 bg-red-50"]:
+                hasError,
+            }
+          )}
+          placeholder="0 AVAX"
+          value={value}
+          onChange={onChangeHandler}
+        />
+      </div>
+      <div
+        className={cls("text-center text-sm", { ["text-red-400"]: hasError })}
+      >
+        {errorMsg}
+      </div>
+      <Button
+        onClick={onSubmit}
+        className="disabled:!opacity-40 disabled:cursor-not-allowed border-none !shadow-none !block
+          mx-auto text-base"
+        disabled={isDisabled}
+        loading={trx}
+      >
+        Cook Rice
+      </Button>
+    </div>
+  );
+};
+export default IndexPage;

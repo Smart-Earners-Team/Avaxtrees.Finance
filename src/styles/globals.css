@@ -1,0 +1,33 @@
+/* ./src/styles/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans text-gray-900 text-xl bg-white bg-cover bg-bottom bg-no-repeat bg-fixed
+    bg-[url('../images/avax-trees-bg-large.jpg')];
+  }
+
+  h1 {
+    @apply text-3xl my-3;
+  }
+  h2 {
+    @apply text-2xl my-3;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-sans font-bold leading-tight;
+  }
+}
+
+@layer utilities {
+  .body-text {
+    @apply bg-[#132803]/90 p-3 md:p-4 rounded-xl text-white space-y-3;
+  }
+}
