@@ -232,12 +232,30 @@ const IndexPage = (props: PageProps) => {
                 label="Contract Balance"
                 value={contractBal}
                 symbol="Rice"
+                icon={
+                  <StaticImage
+                    alt=""
+                    src="../images/avax-crypto-logo.png"
+                    width={10}
+                    height={10}
+                    placeholder="blurred"
+                  />
+                }
               />
               <MetricChip
                 label="Your Compounding Count"
                 value={avaxRewards}
                 symbol="Trxs"
                 borderColorClassName="border-[#57BEEB]"
+                icon={
+                  <StaticImage
+                    alt=""
+                    src="../images/growth-graph.png"
+                    width={10}
+                    height={10}
+                    placeholder="blurred"
+                  />
+                }
               />
             </div>
           </div>
@@ -253,12 +271,30 @@ const IndexPage = (props: PageProps) => {
                     value={riceBal}
                     symbol="Trees"
                     borderColorClassName="border-[#B8D525]"
+                    icon={
+                      <StaticImage
+                        alt=""
+                        src="../images/coconut-tree-clip-art-coconut-tree-vector-png-removebg-preview.png"
+                        width={10}
+                        height={10}
+                        placeholder="blurred"
+                      />
+                    }
                   />
                   <MetricChip
                     label="Pending Rewards"
                     value={avaxRewards}
                     symbol="AVAX"
                     borderColorClassName="border-[#E8C341]"
+                    icon={
+                      <StaticImage
+                        alt=""
+                        src="../images/avax-crypto-logo.png"
+                        width={10}
+                        height={10}
+                        placeholder="blurred"
+                      />
+                    }
                   />
                 </div>
                 <div
@@ -342,6 +378,7 @@ interface MetricChipProps {
   value: string;
   symbol: string;
   borderColorClassName?: string;
+  icon: React.ReactNode;
 }
 
 const MetricChip = ({
@@ -349,17 +386,12 @@ const MetricChip = ({
   value,
   symbol,
   borderColorClassName,
+  icon,
 }: MetricChipProps) => {
   return (
     <div className="bg-white py-2 px-3 space-y-1 rounded-lg text-base inline-block w-full">
       <div className="flex items-center text-xs space-x-1">
-        <StaticImage
-          alt=""
-          src="../images/icon.png"
-          width={10}
-          height={10}
-          placeholder="blurred"
-        />
+        {icon}
         <span>{symbol}</span>
       </div>
       <div
@@ -458,7 +490,7 @@ const TextInput = ({
             </div>
             <div className="flex items-center space-x-1 text-base">
               <StaticImage
-                src="../images/icon.png"
+                src="../images/avax-crypto-logo.png"
                 alt=""
                 width={30}
                 height={30}

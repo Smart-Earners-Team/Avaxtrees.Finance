@@ -28,6 +28,6 @@
 
 @layer utilities {
   .body-text {
-    @apply bg-[#132803]/90 p-3 md:p-4 rounded-xl text-white space-y-3;
+    @apply bg-[#132803]/90 p-3 md:p-10 rounded-xl text-white space-y-3;
   }
 }

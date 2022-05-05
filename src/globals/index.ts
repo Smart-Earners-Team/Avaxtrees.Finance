@@ -16,7 +16,7 @@ export const navigationItems = [
   },
   {
     id: 5,
-    title: "Rice paper",
+    title: "Tree paper",
     href: "/#",
   },
   {
