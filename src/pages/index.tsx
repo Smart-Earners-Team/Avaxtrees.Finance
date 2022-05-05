@@ -173,12 +173,6 @@ const IndexPage = (props: PageProps) => {
     }
   }, [library, amountToPay]);
 
-  // Can start video
-  /* const canStart = useCallback(
-    () => Number.parseFloat(riceBal) > 0,
-    [riceBal, account, active, library]
-  ); */
-
   const {
     location: { origin },
   } = props; // Page props
@@ -225,9 +219,11 @@ const IndexPage = (props: PageProps) => {
         </div>
         <div className="flex flex-col-reverse md:flex-row justify-between my-10 md:space-x-10">
           <div className="w-full">
-            <div className="rounded-lg py-1 px-4 bg-white">
+            <div className="rounded-lg py-2 px-4 bg-white max-w-sm">
               <div className="font-light text-center">
-                Remaining time from your last harvest
+                <div className="mb-2">
+                  Remaining time from your last harvest
+                </div>
                 <CountdownTimer />
               </div>
             </div>
