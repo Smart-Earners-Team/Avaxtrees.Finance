@@ -51,7 +51,7 @@ const IndexPage = (props: PageProps) => {
       try {
         const { _hex } = await contract.getBalance();
         const bal = new BigNumber(_hex).div(BIG_TEN.pow(18));
-        setContractBal(bal.toJSON());
+        setContractBal(bal.toFixed(4));
       } catch (err) {
         setContractBal("0");
       }
