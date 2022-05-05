@@ -34,7 +34,7 @@ const IndexPage = (props: PageProps) => {
   const [harvesting, setHarvesting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [daysOfReplant, setDaysOfReplant] = useState("0");
-  const [endTime, setEndTime] = useState(0);
+  const [endTime, setEndTime] = useState(Date.now() / 1000);
   const [harvestDisabled, setHarvestDisabled] = useState(false);
 
   const {
@@ -56,10 +56,10 @@ const IndexPage = (props: PageProps) => {
           setEndTime(timestamp);
         } catch (err) {
           // console.error(err)
-          setEndTime(0);
+          setEndTime(Date.now() / 1000);
         }
       } else {
-        setEndTime(0);
+        setEndTime(Date.now() / 1000);
       }
     };
     runTest();
