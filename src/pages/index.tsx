@@ -22,7 +22,7 @@ import { PageProps } from "gatsby";
 import { getFullDisplayBalance } from "../utils/formatBalance";
 import { StaticImage } from "gatsby-plugin-image";
 import SEO from "../components/SEO";
-import CountdownTimer from "../components/Tools/CoundownTimer";
+import CountdownTimer from "../components/Tools/CountdownTimer";
 
 const IndexPage = (props: PageProps) => {
   const [amountToPay, setAmountToPay] = useState("");
@@ -88,7 +88,7 @@ const IndexPage = (props: PageProps) => {
             cropForRewards
           );
           const avax = getFullDisplayBalance(
-            new BigNumber(avaxRewards).times(" 0.92"), // Percentage to recieve
+            new BigNumber(avaxRewards).times("0.92"), // Percentage to recieve
             18,
             18
           );
@@ -103,10 +103,12 @@ const IndexPage = (props: PageProps) => {
           // console.error(err);
           setTreeBal("0");
           setAvaxRewards("0");
+          setDaysOfReplant("0");
         }
       } else {
         setTreeBal("0");
         setAvaxRewards("0");
+        setDaysOfReplant("0");
       }
     })();
   }, [account, library, contractBal, balance, fast, active]);

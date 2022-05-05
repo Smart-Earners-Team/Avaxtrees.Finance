@@ -1,5 +1,6 @@
 import React from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { uniqueId } from "lodash";
 
 const minuteSeconds = 60;
 const hourSeconds = 3600;
@@ -25,11 +26,14 @@ const getTimeMinutes = (time: number) =>
 const getTimeHours = (time: number) => ((time % daySeconds) / hourSeconds) | 0;
 const getTimeDays = (time: number) => (time / daySeconds) | 0;
 
-export default function CoundownTimer({ timestamp }: { timestamp: number }) {
+export default React.memo(function CoundownTimer({
+  timestamp,
+}: {
+  timestamp: number;
+}) {
   // These come from the blockchain
   const startTime = Date.now() / 1000; // use UNIX timestamp in seconds
-  const endTime = startTime + timestamp / 1000; // use UNIX timestamp in seconds
-  console.log(startTime + timestamp);
+  const endTime = timestamp; // use UNIX timestamp in seconds
 
   const remainingTime = endTime - startTime;
   const days = Math.ceil(remainingTime / daySeconds);
@@ -43,6 +47,7 @@ export default function CoundownTimer({ timestamp }: { timestamp: number }) {
           colors="#46ADAA"
           duration={daysDuration}
           initialRemainingTime={remainingTime}
+          key={uniqueId()}
         >
           {({ elapsedTime, color }) => (
             <span style={{ color }}>
@@ -63,6 +68,7 @@ export default function CoundownTimer({ timestamp }: { timestamp: number }) {
           onComplete={(totalElapsedTime) => ({
             shouldRepeat: remainingTime - totalElapsedTime > hourSeconds,
           })}
+          key={uniqueId()}
         >
           {({ elapsedTime, color }) => (
             <span style={{ color }}>
@@ -83,6 +89,7 @@ export default function CoundownTimer({ timestamp }: { timestamp: number }) {
           onComplete={(totalElapsedTime) => ({
             shouldRepeat: remainingTime - totalElapsedTime > minuteSeconds,
           })}
+          key={uniqueId()}
         >
           {({ elapsedTime, color }) => (
             <span style={{ color }}>
@@ -103,6 +110,7 @@ export default function CoundownTimer({ timestamp }: { timestamp: number }) {
           onComplete={(totalElapsedTime) => ({
             shouldRepeat: remainingTime - totalElapsedTime > 0,
           })}
+          key={uniqueId()}
         >
           {({ elapsedTime, color }) => (
             <span style={{ color }}>
@@ -116,4 +124,4 @@ export default function CoundownTimer({ timestamp }: { timestamp: number }) {
       </div>
     </div>
   );
-}
+});

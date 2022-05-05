@@ -40,6 +40,8 @@ export default function Link({
   return (
     <a
       href={to}
+      rel="nofollow noreferrer noopener"
+      target="_blank"
       className={cls("hover:text-blue-500", linkClassName, className)}
       {...other}
     >

@@ -7,7 +7,7 @@ export const navigationItems = [
   {
     id: 2,
     title: "Audit Report",
-    href: "/#",
+    href: "https://avaxtree.finance/treepaper.pdf",
   },
   {
     id: 3,
