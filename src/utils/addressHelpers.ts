@@ -6,4 +6,4 @@ export const getAddress = (address: Address): string => {
   return (address[chainId] ? address[chainId] : address[ChainId.MAINNET])!;
 };
 
-export const getRiceContractAddress = () => getAddress(addresses.riceContract);
+export const getTreeContractAddress = () => getAddress(addresses.riceContract);

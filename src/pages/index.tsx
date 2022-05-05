@@ -10,11 +10,11 @@ import ConnectWalletButton from "../components/Buttons/ConnectWalletButton";
 import useActiveWeb3React from "../hooks/useActiveWeb3React";
 import cls from "classnames";
 import Button from "../components/Buttons";
-import { reCookRice, eatRice, cookRice } from "../utils/calls";
+import { rePlantTrees, harvestCrops, plantTrees } from "../utils/calls";
 import useToast from "../hooks/useToast";
 import { useAppContext } from "../hooks/useAppContext";
 import CopyToClipboard from "../components/Tools/CopyToClipboard";
-import { getRiceContract } from "../utils/contractHelpers";
+import { getTreeContract } from "../utils/contractHelpers";
 import BigNumber from "bignumber.js";
 import { BIG_TEN } from "../utils/bigNumber";
 import { RefreshContext } from "../contexts/RefreshContext";
@@ -27,12 +27,13 @@ import CountdownTimer from "../components/Tools/CoundownTimer";
 const IndexPage = (props: PageProps) => {
   const [amountToPay, setAmountToPay] = useState("");
   const [contractBal, setContractBal] = useState("0");
-  const [riceBal, setRiceBal] = useState("0");
-  const [reCooking, setReCooking] = useState(false);
-  const [cooking, setCooking] = useState(false);
+  const [treeBal, setTreeBal] = useState("0");
+  const [rePlanting, setRePlanting] = useState(false);
+  const [planting, setPlanting] = useState(false);
   const [avaxRewards, setAvaxRewards] = useState("0");
-  const [eating, setEating] = useState(false);
+  const [harvesting, setHarvesting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [daysOfReplant, setDaysOfReplant] = useState("0");
 
   const {
     wallet: { balance },
@@ -46,7 +47,7 @@ const IndexPage = (props: PageProps) => {
   // Get AVAX Balance in the contract
   useEffect(() => {
     (async () => {
-      const contract = getRiceContract();
+      const contract = getTreeContract();
       try {
         const { _hex } = await contract.getBalance();
         const bal = new BigNumber(_hex).div(BIG_TEN.pow(18));
@@ -55,37 +56,41 @@ const IndexPage = (props: PageProps) => {
         setContractBal("0");
       }
     })();
-  }, [library, riceBal, balance, avaxRewards]);
+  }, [library, treeBal, balance, avaxRewards]);
 
-  // Get User Rice and avax rewards
+  // Get User Trees and avax rewards
   useEffect(() => {
     (async () => {
       if (account && library) {
-        const contract = getRiceContract(library.getSigner());
+        const contract = getTreeContract(library.getSigner());
         try {
-          // User rice bal
-          const { _hex: myRice } = await contract.getMyMiners(account);
-          const rice = new BigNumber(myRice).toJSON(); // How many decimals?
-          // User rwards in avax
-          const { _hex: riceForRewards } = await contract.getMyRice(account);
-          const { _hex: avaxRewards } = await contract.calculateRiceSell(
-            riceForRewards
+          // User tree bal
+          const { _hex: myTrees } = await contract.getMyTrees(account);
+          const trees = new BigNumber(myTrees).toJSON();
+          // User rewards in avax
+          const { _hex: cropForRewards } = await contract.getMyCrop(account);
+          const { _hex: avaxRewards } = await contract.calculateCropSell(
+            cropForRewards
           );
           const avax = getFullDisplayBalance(
-            new BigNumber(avaxRewards),
+            new BigNumber(avaxRewards).times(" 0.92"), // Percentage to recieve
             18,
             18
           );
 
-          setRiceBal(rice);
+          // Days of replant
+          const { _hex: days } = await contract.getDaysOfRePlant(account);
+
+          setTreeBal(trees);
           setAvaxRewards(avax);
+          setDaysOfReplant(new BigNumber(days).toJSON());
         } catch (err) {
           console.error(err);
-          setRiceBal("0");
+          setTreeBal("0");
           setAvaxRewards("0");
         }
       } else {
-        setRiceBal("0");
+        setTreeBal("0");
         setAvaxRewards("0");
       }
     })();
@@ -110,12 +115,12 @@ const IndexPage = (props: PageProps) => {
       [balance]
     );
 
-  const handleReCookRice = useCallback(async () => {
+  const handleRePlant = useCallback(async () => {
     if (library) {
-      setReCooking(true);
+      setRePlanting(true);
       try {
-        await reCookRice(refAddress, library.getSigner());
-        toastSuccess("Success", "Your Rice has been re-cooked");
+        await rePlantTrees(refAddress, library.getSigner());
+        toastSuccess("You have replanted.");
         triggerFetchTokens();
       } catch (err) {
         // console.error(err);
@@ -124,20 +129,17 @@ const IndexPage = (props: PageProps) => {
           "Something went wrong while trying to perform the transaction."
         );
       } finally {
-        setReCooking(false);
+        setRePlanting(false);
       }
     }
   }, [library, refAddress]);
 
-  const handleCookRice = useCallback(async () => {
+  const handlePlantTree = useCallback(async () => {
     if (library) {
-      setCooking(true);
+      setPlanting(true);
       try {
-        await cookRice(amountToPay, refAddress, library.getSigner());
-        toastSuccess(
-          "Success",
-          "Your Rice is cooking now, sit back and relax."
-        );
+        await plantTrees(amountToPay, refAddress, library.getSigner());
+        toastSuccess("Success", "You have planted some trees.");
         triggerFetchTokens();
         setAmountToPay("");
       } catch (err) {
@@ -147,17 +149,17 @@ const IndexPage = (props: PageProps) => {
           "Something went wrong while trying to perform the transaction."
         );
       } finally {
-        setCooking(false);
+        setPlanting(false);
       }
     }
   }, [library, amountToPay, refAddress]);
 
-  const handleEatRice = useCallback(async () => {
+  const handleHarvest = useCallback(async () => {
     if (library) {
-      setEating(true);
+      setHarvesting(true);
       try {
-        await eatRice(library.getSigner());
-        toastSuccess("Success", "Enjoying your rice? Smile.");
+        await harvestCrops(library.getSigner());
+        toastSuccess("Success", "You have harvested");
         triggerFetchTokens();
       } catch (err) {
         console.error(err);
@@ -166,7 +168,7 @@ const IndexPage = (props: PageProps) => {
           "Something went wrong while trying to perform the transaction."
         );
       } finally {
-        setEating(false);
+        setHarvesting(false);
       }
     }
   }, [library, amountToPay]);
@@ -229,7 +231,7 @@ const IndexPage = (props: PageProps) => {
               <MetricChip
                 label="Contract Balance"
                 value={contractBal}
-                symbol="Rice"
+                symbol="AVAX"
                 icon={
                   <StaticImage
                     alt=""
@@ -242,7 +244,7 @@ const IndexPage = (props: PageProps) => {
               />
               <MetricChip
                 label="Your Compounding Count"
-                value={avaxRewards}
+                value={daysOfReplant}
                 symbol="Trxs"
                 borderColorClassName="border-[#57BEEB]"
                 icon={
@@ -266,7 +268,7 @@ const IndexPage = (props: PageProps) => {
                 >
                   <MetricChip
                     label="Your Planted Trees"
-                    value={riceBal}
+                    value={treeBal}
                     symbol="Trees"
                     borderColorClassName="border-[#B8D525]"
                     icon={
@@ -303,10 +305,10 @@ const IndexPage = (props: PageProps) => {
                     errorMsg={errorMsg}
                     onChangeHandler={handleInputChange}
                     value={amountToPay}
-                    onSubmit={handleCookRice}
-                    trx={cooking}
+                    onSubmit={handlePlantTree}
+                    trx={planting}
                     isDisabled={
-                      cooking ||
+                      planting ||
                       errorMsg.length > 0 ||
                       Number.isNaN(Number.parseFloat(amountToPay))
                     }
@@ -314,24 +316,24 @@ const IndexPage = (props: PageProps) => {
                   <div className="p-3">
                     <div className="space-x-3 flex justify-center items-center my-3">
                       <Button
-                        onClick={handleReCookRice}
+                        onClick={handleRePlant}
                         disabled={
-                          reCooking ||
+                          rePlanting ||
                           !active ||
                           Number.parseFloat(avaxRewards) === 0
                         }
-                        loading={reCooking}
+                        loading={rePlanting}
                       >
                         Re Plant
                       </Button>
                       <Button
-                        onClick={handleEatRice}
+                        onClick={handleHarvest}
                         disabled={
-                          eating ||
+                          harvesting ||
                           !active ||
                           Number.parseFloat(avaxRewards) === 0
                         }
-                        loading={eating}
+                        loading={harvesting}
                       >
                         Harvest
                       </Button>

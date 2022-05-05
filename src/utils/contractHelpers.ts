@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { getRiceContractAddress } from "./addressHelpers";
+import { getTreeContractAddress } from "./addressHelpers";
 import avaxTreeContractAbi from "../config/abi/avaxTreeContract.json";
 import { simpleRpcProvider } from "./providers";
 import { CallSignerType } from "../types";
@@ -13,6 +13,6 @@ export const getContract = (
   return new ethers.Contract(address, abi, signerOrProvider);
 };
 
-export const getRiceContract = (signer?: CallSignerType) => {
-  return getContract(avaxTreeContractAbi, getRiceContractAddress(), signer);
+export const getTreeContract = (signer?: CallSignerType) => {
+  return getContract(avaxTreeContractAbi, getTreeContractAddress(), signer);
 };
