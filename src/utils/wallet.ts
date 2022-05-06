@@ -20,10 +20,10 @@ export const setupNetwork = async () => {
         params: [
           {
             chainId: `0x${chainId.toString(16)}`,
-            chainName: "BSC Testnet",
+            chainName: "Avalanche Network",
             nativeCurrency: {
-              name: "BSC Testnet",
-              symbol: "BSC",
+              name: "Avalanche Network",
+              symbol: "AVAX",
               decimals: 18,
             },
             rpcUrls: [getRpcUrl()],
