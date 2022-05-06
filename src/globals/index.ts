@@ -17,8 +17,7 @@ export const navigationItems = [
   {
     id: 4,
     title: "Tree paper",
-    // href: "https://avaxtrees.finance/treepaper.pdf",
-    href: "/#",
+    href: "https://avaxtrees.finance/treepaper.pdf",
   },
   {
     id: 5,
