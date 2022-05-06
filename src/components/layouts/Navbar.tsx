@@ -22,7 +22,7 @@ export default function Navbar() {
     <Section
       containerClass="bg-transparent mt-5 px-2"
       className={cls(
-        "!max-w-screen-xl bg-white shadow shadow-gray-400 !px-4 md:!px-4 md:rounded-full",
+        "!max-w-screen-xl bg-white shadow-md !px-4 md:!px-4 md:rounded-full",
         {
           "rounded-full": !open,
         }

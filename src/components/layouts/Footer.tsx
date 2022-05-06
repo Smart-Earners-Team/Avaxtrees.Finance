@@ -8,7 +8,7 @@ export default function Footer(_props: FooterProps) {
   return (
     <Section
       containerClass="my-10 px-2"
-      className="bg-white rounded-full border-gray-300 border"
+      className="bg-white rounded-full border-gray-300 border shadow-md"
     >
       <footer
         className="text-center px-2 py-3 flex flex-col space-y-2 sm:flex-row sm:space-y-0 justify-between

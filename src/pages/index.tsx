@@ -250,7 +250,7 @@ const IndexPage = (props: PageProps) => {
         </div>
         <div className="flex flex-col-reverse md:flex-row justify-center my-10 md:space-x-10">
           <div className="w-full max-w-sm mx-auto">
-            <div className="rounded-lg py-2 px-4 bg-white">
+            <div className="rounded-lg py-2 px-4 bg-white shadow-md">
               <div className="font-light text-center">
                 <div className="mb-2">
                   Remaining time from your last harvest
@@ -445,7 +445,7 @@ const MetricChip = ({
   icon,
 }: MetricChipProps) => {
   return (
-    <div className="bg-white py-2 px-3 space-y-1 rounded-lg text-base inline-block w-full">
+    <div className="bg-white py-2 px-3 shadow-md space-y-1 rounded-lg text-base inline-block w-full">
       <div className="flex items-center text-xs space-x-1">
         {icon}
         <span>{symbol}</span>
@@ -513,7 +513,7 @@ const TextInput = ({
   } = useAppContext();
   return (
     <div className="w-full space-y-2 mx-auto">
-      <div className="bg-white p-3 rounded-lg transition-transform duration-200 ease-linear">
+      <div className="bg-white shadow-md p-3 rounded-lg transition-transform duration-200 ease-linear">
         <div>
           <div className="mb-2 text-xs font-light">Deposit Amount</div>
           <div className="relative flex items-center justify-between space-x-1">
