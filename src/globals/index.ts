@@ -7,7 +7,7 @@ export const navigationItems = [
   {
     id: 2,
     title: "Audit Report",
-    href: "/#",
+    href: "https://github.com/TTEB-Finance/SmartContractAudits/blob/main/Avalanche%20C-Chain/TTEB%20Finance%20Audit%20Report%20for%20AVAX%20Trees.pdf",
   },
   {
     id: 3,
