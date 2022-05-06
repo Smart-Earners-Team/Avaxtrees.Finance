@@ -366,12 +366,14 @@ const IndexPage = (props: PageProps) => {
                           disabled={
                             harvesting ||
                             !active ||
-                            Number.parseFloat(avaxRewards) === 0 ||
-                            harvestDisabled
+                            Number.parseFloat(avaxRewards) === 0
                           }
                           loading={harvesting}
                         >
-                          Harvest
+                          {!harvestDisabled &&
+                          Number.parseInt(daysOfReplant) < 6
+                            ? "Harvest (60% Tax)"
+                            : "Harvest"}
                         </Button>
                       )}
                     </div>
@@ -387,7 +389,7 @@ const IndexPage = (props: PageProps) => {
           </div>
         </div>
         <div className="body-text md:space-y-0 md:flex md:space-x-10 md:items-start">
-          <div className="my-5 md:my-0 max-w-xl mx-auto lg:mx-0">
+          <div className="my-5 w-full md:my-0 max-w-md mx-auto lg:mx-0">
             <h2>Nutritional Facts</h2>
             <NutritionalStat
               label="Daily Return"
@@ -405,7 +407,7 @@ const IndexPage = (props: PageProps) => {
               divider
             />
           </div>
-          <div className="space-y-5">
+          <div className="space-y-5 w-full max-w-lg">
             <h2>Referral Link</h2>
             <p>
               Earn 12% of the AVAX used to plant tree from anyone who uses your
@@ -474,13 +476,11 @@ const NutritionalStat = (props: NutritionalStatProps) => {
         "!flex-row items-center space-x-2 !my-1": props.divider,
       })}
     >
-      <div className="text-[#575757] w-full dark:text-[#E2E2E4]">
-        {props.label}
-      </div>
-      {props.divider && <div className="h-[1px] w-full bg-[#A2A5AB]" />}
+      <div className="w-full">{props.label}</div>
+      {props.divider && <div className="h-[1px] w-full bg-gray-100" />}
       <div
-        className={cls("text-[#575757] w-full dark:text-[#E2E2E4]", {
-          "text-xl font-medium text-[#5b6a81] !-mt-0.5": !props.divider,
+        className={cls("w-full", {
+          "text-xl font-medium !-mt-0.5": !props.divider,
         })}
       >
         {props.value}{" "}
