@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import PropTypes from "prop-types";
 import { StaticQuery, graphql } from "gatsby";
 import ogImage from "../images/avax-trees-bg-large.jpg";
-import twitterImage from "../images/avax-trees-bg-large.jpg";
+import twitterImage from "../images/avax-trees-bg-small.jpg";
 
 const query = graphql`
   query GetSiteMetadata {

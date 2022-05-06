@@ -38,7 +38,6 @@ export default React.memo(function CoundownTimer({
   const endTime = timestamp; // use UNIX timestamp in seconds
 
   const remainingTime = endTime - startTime;
-  console.log(remainingTime);
 
   const days = Math.ceil(remainingTime / daySeconds);
   const daysDuration = days * daySeconds;

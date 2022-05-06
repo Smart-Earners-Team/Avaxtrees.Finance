@@ -7,7 +7,7 @@ export const navigationItems = [
   {
     id: 2,
     title: "Audit Report",
-    href: "https://avaxtree.finance/treepaper.pdf",
+    href: "/#",
   },
   {
     id: 3,
@@ -17,7 +17,7 @@ export const navigationItems = [
   {
     id: 4,
     title: "Tree paper",
-    href: "/#",
+    href: "https://avaxtrees.finance/treepaper.pdf",
   },
   {
     id: 5,
