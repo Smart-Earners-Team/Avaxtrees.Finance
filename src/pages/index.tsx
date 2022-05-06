@@ -390,7 +390,7 @@ const IndexPage = (props: PageProps) => {
         </div>
         <div className="body-text md:space-y-0 md:flex md:space-x-10 md:items-start">
           <div className="my-5 w-full md:my-0 max-w-md mx-auto lg:mx-0">
-            <h2>Nutritional Facts</h2>
+            <h2>Environmental Facts</h2>
             <NutritionalStat
               label="Daily Return"
               value="8"
