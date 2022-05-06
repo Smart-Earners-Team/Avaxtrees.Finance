@@ -222,9 +222,9 @@ const IndexPage = (props: PageProps) => {
             is a complete ecosystem.
           </p>
           <p>
-            Chickens eat eat rice($SOYA) and drop $FERT which in turn helps
-            $TREE's to grow. For every 10,000 $TREE token sold, we plant a tree
-            in Africa.
+            Chickens eat rice($SOYA) and drop $FERT which in turn helps $TREE's
+            to grow. For every 10,000 $TREE token sold, we plant a tree in
+            Africa.
           </p>
           <p>
             To stake Tree token and start earning $FERT, check out the staking
