@@ -16,6 +16,7 @@ export default function Button({
         "rounded-md px-4 py-2 bg-[#FEF975] text-[#294B0F] hover:bg-[#f1eb34] ring-[#3C641D]",
         "ring-2 disabled:cursor-not-allowed disabled:opacity-60 text-center border-none outline-none",
         "font-medium focus:bg-[#f1eb34] focus-within:bg-[#f1eb34] disabled:hover:bg-[#FEF975]",
+        "text-lg",
         className
       )}
       {...props}
