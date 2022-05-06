@@ -20,7 +20,7 @@ export default function Footer(_props: FooterProps) {
             <img src={ttebLogo} alt="TTEB Logo" width={70} height={40} />
           </a>
         </div>
-        <div>&copy; Avaxtree.Finance - {new Date().getFullYear()}</div>
+        <div>&copy; Avaxtrees.Finance - {new Date().getFullYear()}</div>
       </footer>
     </Section>
   );
