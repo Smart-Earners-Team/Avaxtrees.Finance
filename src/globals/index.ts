@@ -12,12 +12,13 @@ export const navigationItems = [
   {
     id: 3,
     title: "Contract",
-    href: "/#",
+    href: "https://snowtrace.io/address/0x48fb25ae9b51704173dcf71e03e6f3896dc20abe",
   },
   {
     id: 4,
     title: "Tree paper",
-    href: "https://avaxtrees.finance/treepaper.pdf",
+    // href: "https://avaxtrees.finance/treepaper.pdf",
+    href: "/#",
   },
   {
     id: 5,
