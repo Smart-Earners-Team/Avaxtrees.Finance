@@ -22,7 +22,7 @@ export const setupNetwork = async () => {
             chainId: `0x${chainId.toString(16)}`,
             chainName: "Avalanche Network",
             nativeCurrency: {
-              name: "Avalanche Network",
+              name: "Avalanche",
               symbol: "AVAX",
               decimals: 18,
             },
