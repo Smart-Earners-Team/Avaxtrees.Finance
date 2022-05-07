@@ -1,9 +1,16 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import PropTypes from "prop-types";
 import { StaticQuery, graphql } from "gatsby";
 import ogImage from "../images/avax-trees-bg-large.jpg";
 import twitterImage from "../images/avax-trees-bg-small.jpg";
+
+interface SEOProps {
+  description: string;
+  meta?: any[];
+  slug?: string;
+  title?: string;
+  lang?: string;
+}
 
 const query = graphql`
   query GetSiteMetadata {
@@ -17,7 +24,13 @@ const query = graphql`
   }
 `;
 
-function SEO({ meta, title, description, slug, lang = "en" }) {
+function SEO({
+  meta = [],
+  title = "",
+  description,
+  slug = "",
+  lang = "en",
+}: SEOProps) {
   return (
     <StaticQuery
       query={query}
@@ -25,7 +38,8 @@ function SEO({ meta, title, description, slug, lang = "en" }) {
         const { siteMetadata } = data.site;
         const metaDescription = description || siteMetadata.description;
         const metaImages = { og: ogImage, twitter: twitterImage };
-        const getMetaImageUrl = (image) => `${siteMetadata.siteUrl}${image}`;
+        const getMetaImageUrl = (image: string) =>
+          `${siteMetadata.siteUrl}${image}`;
         const url = `${siteMetadata.siteUrl}${slug}`;
         const twitterUrl = "@CookedR1ce";
         return (
@@ -90,19 +104,5 @@ function SEO({ meta, title, description, slug, lang = "en" }) {
     />
   );
 }
-
-SEO.defaultProps = {
-  meta: [],
-  title: "",
-  slug: "",
-};
-
-SEO.propTypes = {
-  description: PropTypes.string,
-  image: PropTypes.string,
-  meta: PropTypes.array,
-  slug: PropTypes.string,
-  title: PropTypes.string.isRequired,
-};
 
 export default SEO;

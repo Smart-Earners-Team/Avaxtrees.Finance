@@ -216,7 +216,7 @@ const IndexPage = (props: PageProps) => {
       />
       <Section noPadding={false}>
         <div className="body-text mx-auto">
-          <h1>Plant a Tree</h1>
+          {/* <h1>Plant a Tree</h1>
           <p>
             Plant a tree with a minimum of 0.1 AVAX, earn 8% daily returns. This
             is a complete ecosystem.
@@ -229,8 +229,8 @@ const IndexPage = (props: PageProps) => {
           <p>
             To stake Tree token and start earning $FERT, check out the staking
             page.
-          </p>
-          <div className="!mt-10 space-y-3 text-base text-gray-100">
+          </p> */}
+          <div className="space-y-3 text-base text-gray-100">
             <h2 className="text-white">Now There is a Rule!</h2>
             <p>
               # To maintain a green ecosystem, you should re-plant trees at
@@ -370,10 +370,7 @@ const IndexPage = (props: PageProps) => {
                           }
                           loading={harvesting}
                         >
-                          {!harvestDisabled &&
-                          Number.parseInt(daysOfReplant) < 6
-                            ? "Harvest (60% Tax)"
-                            : "Harvest"}
+                          Harvest
                         </Button>
                       )}
                     </div>
