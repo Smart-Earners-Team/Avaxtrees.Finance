@@ -5,7 +5,7 @@
 
 @layer base {
   body {
-    @apply font-sans text-gray-900 text-xl bg-white bg-cover bg-bottom bg-no-repeat bg-fixed
+    @apply font-sans text-gray-900 text-xl bg-[#1b3508] bg-cover bg-bottom bg-no-repeat bg-fixed
     bg-[url('../images/avax-trees-bg-large.jpg')];
   }
 

@@ -4,7 +4,8 @@ import path from "path";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `Avax Trees`,
-    description: "About AVAX Trees",
+    description: `Plant a tree with a minimum of 0.1 AVAX, earn 8% daily returns.
+      This is a complete ecosystem.`,
     siteUrl: `https://avaxtrees.finance`,
   },
   plugins: [
@@ -48,6 +49,7 @@ const config: GatsbyConfig = {
       },
     },
     "gatsby-plugin-netlify",
+    "gatsby-plugin-no-sourcemaps",
   ],
 };
 
